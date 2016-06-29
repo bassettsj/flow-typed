@@ -1,0 +1,36 @@
+// @flow
+import type {
+    $Request,
+    $Response
+} from 'express';
+
+declare module '!passport/lib/middlware/authenticate' {
+    declare function authenticateMiddlware(req: PassportRequest, res: $Response, next: NextFunction): void;
+    declare type AuthenticateOpts = {
+        session?: boolean,
+        successRedirect?: string,
+        failureRedirect?: string,
+        assignProperty?: string
+    };
+    declare type AuthenticateCallback = (err: ?Error, user: Object, info: Object) => mixed;
+    declare function authenticate(name: string | Array<string>, optionsOrCallback: AuthenticateOpts | AuthenticateCallback, ...args: Array<any>): authenticateMiddlware;
+    declare function authenticate(name: string | Array<string>, options: AuthenticateOpts, callback: AuthenticateCallback): authenticateMiddlware;
+}
+
+declare module '!passport' {
+    declare type LoginOpts = { session?: boolean };
+    declare type LoginCallback = (err?: ?Error) => mixed;
+    declare class User {}
+    declare class PasssportRequest extends $Request {
+        login(user: User, ...args: Array<void>): void;
+        login(user: User, optionsOrCAllback: LoginOpts | LoginCallback, ...args: Array<void>): void;
+        login(user: User, options: LoginOpts, done: LoginCallback): void;
+        logIn(user: User, ...args: Array<void>): void;
+        logIn(user: User, optionsOrCAllback: LoginOpts | LoginCallback, ...args: Array<void>): void;
+        logIn(user: User, options: LoginOpts, done: LoginCallback): void;
+        logout(): void;
+        logOut(): void;
+        isAuthenticated(): boolean;
+        isUnauthenticated(): boolean;
+    }
+}
